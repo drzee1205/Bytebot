@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "name": "bytebot",
+  "builds": [
+    {
+      "src": "packages/bytebot-ui/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "distDir": ".next"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "packages/bytebot-ui/pages/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "packages/bytebot-ui/$1"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "ANTHROPIC_API_KEY": "@anthropic-api-key",
+    "OPENAI_API_KEY": "@openai-api-key",
+    "GEMINI_API_KEY": "@gemini-api-key",
+    "BYTEBOT_DESKTOP_BASE_URL": "@desktop-base-url",
+    "AUTH_SECRET": "@auth-secret",
+    "AUTH_ENABLED": "@auth-enabled"
+  },
+  "functions": {
+    "packages/bytebot-ui/pages/api/**/*.ts": {
+      "maxDuration": 30
+    },
+    "packages/bytebot-ui/pages/api/tasks/process.ts": {
+      "maxDuration": 300
+    },
+    "packages/bytebot-ui/pages/api/sse/**/*.ts": {
+      "maxDuration": 300
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/tasks/scheduler",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
+

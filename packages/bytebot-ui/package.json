@@ -3,10 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run build --prefix ../shared && tsx server.ts",
-    "build": "npm run build --prefix ../shared && next build",
-    "start": "npm run build --prefix ../shared && tsx server.ts",
-    "lint": "next lint"
+    "dev": "npm run build:shared && next dev",
+    "build": "npm run build:shared && next build",
+    "build:vercel": "npm run build:shared && npx prisma generate && next build",
+    "build:shared": "npm run build --prefix ../shared",
+    "start": "next start",
+    "start:custom": "npm run build:shared && tsx server.ts",
+    "lint": "next lint",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:push": "npx prisma db push"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -58,6 +64,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^6.5.0",
+    "@prisma/client": "^6.5.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
