@@ -1,0 +1,44 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build:vercel",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install && npm run build:shared",
+  "outputDirectory": ".next",
+  "functions": {
+    "pages/api/tasks/process.ts": {
+      "maxDuration": 300
+    },
+    "pages/api/sse/**/*.ts": {
+      "maxDuration": 300
+    },
+    "pages/api/agent/**/*.ts": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/desktop/(.*)",
+      "destination": "/api/desktop/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/sse/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Connection",
+          "value": "keep-alive"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/event-stream"
+        }
+      ]
+    }
+  ]
+}
+
